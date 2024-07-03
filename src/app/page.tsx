@@ -1,3 +1,5 @@
+import Header from "@/components/global/header";
+
 export default function Home() {
-  return <h1>Hello world</h1>;
+  return <div>hi i am home page</div>;
 }
