@@ -1,5 +1,11 @@
-import Header from "@/components/global/header";
+"use client";
+
+import Card from "@/components/home/card";
 
 export default function Home() {
-  return <div>hi i am home page</div>;
+  return (
+    <div>
+      <Card />
+    </div>
+  );
 }
