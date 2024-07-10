@@ -18,6 +18,8 @@ const Card = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 8;
 
+  const [search, setSearch] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("https://fakestoreapi.com/products");
@@ -33,22 +35,53 @@ const Card = () => {
     fetchData();
   }, []);
 
+  const handleSearchChange = (event: any) => {
+    setSearch(event.target.value);
+    setCurrentPage(1);
+  };
+
   if (!products.length) {
     console.log("No products found");
     return;
   }
+  console;
+  const filteredProducts = products.filter((product: TCard) =>
+    product.title.toLowerCase().includes(search.toLowerCase())
+  );
 
-  const totalPages = Math.ceil(products.length / perPage);
+  const totalPages = Math.ceil(filteredProducts.length / perPage);
+
+  const startIndex = (currentPage - 1) * perPage;
+  const paginatedProducts = filteredProducts.slice(
+    startIndex,
+    startIndex + perPage
+  );
   const onPageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
 
-  const startIndex = (currentPage - 1) * perPage;
-  const paginatedProducts = products.slice(startIndex, startIndex + perPage);
-
   return (
     <>
-      <div className="page-padding my-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="page-padding w-full flex justify-end mt-6">
+        <div>
+          <form className="flex items-center max-w-sm mx-auto">
+            <label htmlFor="simple-search" className="sr-only">
+              Search
+            </label>
+            <div className="relative w-full">
+              <input
+                type="text"
+                id="simple-search"
+                className="!pl-3 bg-gray-50 border border-gray-300 text-text2 dark:text-text focus:!ring-text2 focus:!border-text2 text-sm rounded-lg ring-text2 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-text dark:focus:ring-text dark:focus:border-text"
+                placeholder="What are you looking for ?"
+                required
+                onChange={handleSearchChange}
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+      <div className="page-padding my-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {paginatedProducts.map((item: TCard) => {
           return (
             <div
