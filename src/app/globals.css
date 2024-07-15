@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.width-control {
+  @apply px-4 lg:px-32;
+}
+
+.page-padding {
+  @apply px-28;
+}
