@@ -1,4 +1,4 @@
-import { Pagination, Rating } from "flowbite-react";
+import { CustomFlowbiteTheme, Pagination, Rating } from "flowbite-react";
 import { useEffect, useState } from "react";
 
 type TCard = {
@@ -11,6 +11,34 @@ type TCard = {
   rating: {
     rate: number;
   };
+};
+
+const customTheme: CustomFlowbiteTheme["pagination"] = {
+  base: "",
+  layout: {
+    table: {
+      base: "text-sm text-white dark:text-white",
+      span: "font-semibold text-gray-900 dark:text-white",
+    },
+  },
+  pages: {
+    base: "xs:mt-0 mt-2 inline-flex items-center -space-x-px",
+    showIcon: "inline-flex",
+    previous: {
+      base: "ml-0 rounded-l-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 enabled:hover:bg-gray-100 enabled:hover:text-text2 dark:border-text2 dark:bg-text2 dark:text-white enabled:dark:hover:bg-gray-700 enabled:dark:hover:text-white",
+      icon: "h-5 w-5",
+    },
+    next: {
+      base: "rounded-r-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 enabled:hover:bg-gray-100 enabled:hover:text-text2 dark:border-gray-700 dark:bg-text2 dark:text-white enabled:dark:hover:bg-gray-700 enabled:dark:hover:text-white",
+      icon: "h-5 w-5",
+    },
+    selector: {
+      base: "w-12 border border-gray-300 bg-white py-2 leading-tight text-gray-500 enabled:hover:bg-gray-100 enabled:hover:text-text2 dark:border-text2 dark:bg-text2 dark:text-white enabled:dark:hover:bg-gray-700 enabled:dark:hover:text-white",
+      active:
+        "bg-cyan-50 text-cyan-600 hover:bg-cyan-100 hover:text-cyan-700 dark:border-text2 dark:bg-text2 dark:text-text2",
+      disabled: "cursor-not-allowed opacity-50",
+    },
+  },
 };
 
 const Card = () => {
@@ -72,7 +100,7 @@ const Card = () => {
               <input
                 type="text"
                 id="simple-search"
-                className="!pl-3 bg-gray-50 border border-gray-300 text-text2 dark:text-text focus:!ring-text2 focus:!border-text2 text-sm rounded-lg ring-text2 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-text dark:focus:ring-text dark:focus:border-text"
+                className="!pl-3 bg-gray-50 border border-gray-300 text-text2 dark:text-text focus:!ring-text2 focus:!border-text2 text-sm rounded-lg ring-text2 block w-full ps-10 p-2.5  dark:bg-text2 dark:border-textbg-text2 dark:placeholder-text dark:focus:ring-text dark:focus:border-text"
                 placeholder="What are you looking for ?"
                 required
                 onChange={handleSearchChange}
@@ -81,12 +109,12 @@ const Card = () => {
           </form>
         </div>
       </div>
-      <div className="page-padding my-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="page-padding my-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 place-items-center gap-6">
         {paginatedProducts.map((item: TCard) => {
           return (
             <div
               key={item.id}
-              className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
+              className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-primary1 dark:border-primary1 "
             >
               <a href="#">
                 <div className="flex justify-center p-6">
@@ -103,13 +131,13 @@ const Card = () => {
                     {item.title}
                   </h5>
                 </a>
-                <p className="mb-3 font-normal text-text1 dark:text-gray-400 h-24 overflow-auto">
+                <p className="mb-3 font-normal text-text1 dark:text-white h-24 overflow-auto">
                   {item.description}
                 </p>
-                <p className="mb-3 font-medium text-text2 uppercase dark:text-gray-400">
+                <p className="mb-3 font-medium text-text2 uppercase dark:text-white">
                   {item.category}
                 </p>
-                <p className="mb-3 text-lg font-bold text-text2 dark:text-gray-400">
+                <p className="mb-3 text-lg font-bold text-text2 dark:text-white">
                   ${item.price}
                 </p>
                 <Rating>
@@ -126,6 +154,7 @@ const Card = () => {
 
       <div className="flex overflow-x-auto sm:justify-center mb-6">
         <Pagination
+          theme={customTheme}
           layout="navigation"
           currentPage={currentPage}
           totalPages={totalPages}
