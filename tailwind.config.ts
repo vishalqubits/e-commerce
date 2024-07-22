@@ -33,6 +33,6 @@ const config: Config = {
       hoverButtonLight: "#A0BCE0",
     },
   },
-  plugins: [require("flowbite/plugin")],
+  plugins: [require("flowbite/plugin"), require("@tailwindcss/forms")],
 };
 export default config;
