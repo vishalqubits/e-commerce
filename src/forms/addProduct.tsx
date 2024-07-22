@@ -51,14 +51,13 @@ const AddProductForm = () => {
               }
             );
 
-            if (productResponse.ok){
-              const data =  await 
+            if (productResponse.ok) {
+              const data = await productResponse.json();
+              console.log("Date added successfully", data);
             }
           } catch (error) {
             console.log("Error while adding product ", error);
           }
-
-          console.log("product....", productResponse);
         }}
         validationSchema={toFormikValidationSchema(addProudctFormSchema)}
       >
