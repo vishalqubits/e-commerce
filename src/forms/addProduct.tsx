@@ -22,7 +22,40 @@ const addProudctFormSchema = object({
   }),
 });
 
-const AddProductForm = () => {
+export type TProduct = {
+  id?: string;
+  title?: string;
+  price?: string;
+  description?: string;
+  image?: string;
+  category?: string;
+};
+
+// fetch('https://fakestoreapi.com/products/7',{
+//   method:"PUT",
+//   body:JSON.stringify(
+//       {
+//           title: 'test product',
+//           price: 13.5,
+//           description: 'lorem ipsum set',
+//           image: 'https://i.pravatar.cc',
+//           category: 'electronic'
+//       }
+//   )
+// })
+//   .then(res=>res.json())
+//   .then(json=>console.log(json))
+
+const AddProductForm = ({
+  id,
+  title,
+  price,
+  description,
+  image,
+  category,
+}: TProduct) => {
+  console.log("product: ", title, price, description, image, category);
+
   return (
     <>
       <Formik
