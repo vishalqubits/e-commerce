@@ -1,5 +1,5 @@
 import AddProductForm from "@/forms/addProduct";
-import { CustomFlowbiteTheme, Pagination, Rating } from "flowbite-react";
+import { CustomFlowbiteTheme, Modal, Pagination, Rating } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { FaEdit } from "react-icons/fa";
@@ -50,6 +50,7 @@ const Card = () => {
   const perPage = 8;
 
   const [search, setSearch] = useState("");
+  const [openEditModal, setOpenEditModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,27 +104,6 @@ const Card = () => {
     }
   };
 
-  const handleEdit = async (
-    id: number,
-    title: string,
-    price: number,
-    description: string,
-    image: string,
-    category: string
-  ) => {
-    console.log("clicked edit");
-    return (
-      <AddProductForm
-        id={String(id)}
-        title={title}
-        price={String(price)}
-        description={description}
-        image={image}
-        category={category}
-      />
-    );
-  };
-
   return (
     <>
       <div className="page-padding w-full flex justify-end mt-6">
@@ -153,18 +133,7 @@ const Card = () => {
               className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-primary1 dark:border-primary1 "
             >
               <div className="flex justify-end m-4 text-secondary2 cursor-pointer">
-                <FaEdit
-                  onClick={() =>
-                    handleEdit(
-                      item.id,
-                      item.title,
-                      item.price,
-                      item.description,
-                      item.image,
-                      item.category
-                    )
-                  }
-                />
+                <FaEdit onClick={() => setOpenEditModal(true)} />
               </div>
 
               <div className="flex justify-end m-4 text-secondary2 cursor-pointer">
@@ -200,6 +169,24 @@ const Card = () => {
                   </p>
                 </Rating>
               </div>
+
+              <Modal
+                show={openEditModal}
+                onClose={() => setOpenEditModal(false)}
+                className="!bg-opacity-50"
+              >
+                <Modal.Header>Update store item</Modal.Header>
+                <Modal.Body>
+                  <AddProductForm
+                    id={String(item.id)}
+                    title={item.title}
+                    price={String(item.price)}
+                    description={item.description}
+                    image={item.image}
+                    category={item.category}
+                  />
+                </Modal.Body>
+              </Modal>
             </div>
           );
         })}

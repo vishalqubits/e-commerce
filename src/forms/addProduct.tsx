@@ -1,6 +1,5 @@
 import { Button, Label } from "flowbite-react";
 import { Formik, Form, Field } from "formik";
-import { title } from "process";
 import { object, string } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
@@ -31,21 +30,6 @@ export type TProduct = {
   category?: string;
 };
 
-// fetch('https://fakestoreapi.com/products/7',{
-//   method:"PUT",
-//   body:JSON.stringify(
-//       {
-//           title: 'test product',
-//           price: 13.5,
-//           description: 'lorem ipsum set',
-//           image: 'https://i.pravatar.cc',
-//           category: 'electronic'
-//       }
-//   )
-// })
-//   .then(res=>res.json())
-//   .then(json=>console.log(json))
-
 const AddProductForm = ({
   id,
   title,
@@ -54,42 +38,67 @@ const AddProductForm = ({
   image,
   category,
 }: TProduct) => {
-  console.log("product: ", title, price, description, image, category);
-
   return (
     <>
       <Formik
         initialValues={{
-          title: "",
-          price: "",
-          description: "",
-          image: "",
-          category: "",
+          title: id ? title : "",
+          price: id ? price : "",
+          description: id ? description : "",
+          image: id ? image : "",
+          category: id ? category : "",
         }}
-        onSubmit={async (values) => {
+        onSubmit={async (values, { resetForm }) => {
           alert("Form is submitted. Thank You !!");
 
           try {
-            const productResponse = await fetch(
-              "https://fakestoreapi.com/products",
-              {
-                method: "POST",
-                body: JSON.stringify({
-                  title: values.title,
-                  price: Number(values.price),
-                  description: values.description,
-                  image: values.image,
-                  category: values.category,
-                }),
-              }
-            );
+            if (id) {
+              const productResponse = await fetch(
+                `https://fakestoreapi.com/products/${Number(id)}`,
+                {
+                  method: "PUT",
+                  body: JSON.stringify({
+                    title: values.title,
+                    price: Number(values.price),
+                    description: values.description,
+                    image: values.image,
+                    category: values.category,
+                  }),
+                }
+              );
 
-            if (productResponse.ok) {
-              const data = await productResponse.json();
-              console.log("Date added successfully", data);
+              if (productResponse.ok) {
+                const data = await productResponse.json();
+                console.log("Data updated successfully", data);
+                resetForm();
+              } else {
+                throw new Error("Error while updating product");
+              }
+            } else {
+              const productResponse = await fetch(
+                "https://fakestoreapi.com/products",
+                {
+                  method: "POST",
+                  body: JSON.stringify({
+                    title: values.title,
+                    price: Number(values.price),
+                    description: values.description,
+                    image: values.image,
+                    category: values.category,
+                  }),
+                }
+              );
+
+              if (productResponse.ok) {
+                const data = await productResponse.json();
+                console.log("Data added successfully", data);
+                resetForm();
+              } else {
+                throw new Error("Error while adding product");
+              }
             }
           } catch (error) {
-            console.log("Error while adding product ", error);
+            console.log(error);
           }
         }}
         validationSchema={toFormikValidationSchema(addProudctFormSchema)}
