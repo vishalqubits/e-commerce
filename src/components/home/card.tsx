@@ -1,5 +1,8 @@
-import { CustomFlowbiteTheme, Pagination, Rating } from "flowbite-react";
+import AddProductForm from "@/forms/addProduct";
+import { CustomFlowbiteTheme, Modal, Pagination, Rating } from "flowbite-react";
 import { useEffect, useState } from "react";
+import { AiFillDelete } from "react-icons/ai";
+import { FaEdit } from "react-icons/fa";
 
 type TCard = {
   id: number;
@@ -47,6 +50,7 @@ const Card = () => {
   const perPage = 8;
 
   const [search, setSearch] = useState("");
+  const [openEditModal, setOpenEditModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,6 +92,18 @@ const Card = () => {
     setCurrentPage(newPage);
   };
 
+  const handleDelete = async (id: number) => {
+    const deleteApi = await fetch(`https://fakestoreapi.com/products/${id}`, {
+      method: "DELETE",
+    });
+
+    if (deleteApi.ok) {
+      console.log(`Successfully delete id: ${id}`);
+    } else {
+      console.log("Failed to delete item");
+    }
+  };
+
   return (
     <>
       <div className="page-padding w-full flex justify-end mt-6">
@@ -116,21 +132,27 @@ const Card = () => {
               key={item.id}
               className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-primary1 dark:border-primary1 "
             >
-              <a href="#">
-                <div className="flex justify-center p-6">
-                  <img
-                    className="rounded-lg h-48 "
-                    src={item.image}
-                    alt="product"
-                  />
-                </div>
-              </a>
+              <div className="flex justify-end m-4 text-secondary2 cursor-pointer">
+                <FaEdit onClick={() => setOpenEditModal(true)} />
+              </div>
+
+              <div className="flex justify-end m-4 text-secondary2 cursor-pointer">
+                <AiFillDelete onClick={() => handleDelete(item.id)} />
+              </div>
+
+              <div className="flex justify-center p-6">
+                <img
+                  className="rounded-lg h-48 "
+                  src={item.image}
+                  alt="product"
+                />
+              </div>
+
               <div className="p-5">
-                <a href="#">
-                  <h5 className="mb-2 text-xl font-bold tracking-tight text-text2 dark:text-white">
-                    {item.title}
-                  </h5>
-                </a>
+                <h5 className="mb-2 text-xl font-bold tracking-tight text-text2 dark:text-white">
+                  {item.title}
+                </h5>
+
                 <p className="mb-3 font-normal text-text1 dark:text-white h-24 overflow-auto">
                   {item.description}
                 </p>
@@ -147,6 +169,24 @@ const Card = () => {
                   </p>
                 </Rating>
               </div>
+
+              <Modal
+                show={openEditModal}
+                onClose={() => setOpenEditModal(false)}
+                className="!bg-opacity-50"
+              >
+                <Modal.Header>Update store item</Modal.Header>
+                <Modal.Body>
+                  <AddProductForm
+                    id={String(item.id)}
+                    title={item.title}
+                    price={String(item.price)}
+                    description={item.description}
+                    image={item.image}
+                    category={item.category}
+                  />
+                </Modal.Body>
+              </Modal>
             </div>
           );
         })}
